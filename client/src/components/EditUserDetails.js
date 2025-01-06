@@ -63,7 +63,7 @@ const EditUserDetails = ({ onClose, user }) => {
                 profile_pic: data.profile_pic
             };
 
-            const URL = `${process.env.REACT_APP_BACKEND_URL}/api/update-user`;
+            const URL = `https://chat-application-8qij.onrender.com/api/update-user`;
 
             const response = await axios.post(URL, sanitizedData, {
                 withCredentials: true
