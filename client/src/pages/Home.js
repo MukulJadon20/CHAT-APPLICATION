@@ -39,34 +39,82 @@ const Home = () => {
   }, []);
 
   /*** WebSocket connection ***/
-  useEffect(() => {
-    const socketConnection = io(process.env.REACT_APP_BACKEND_URL, {
-      auth: {
-        token: localStorage.getItem('token'),
-      },
-      transports: ['websocket'], // Enforce WebSocket connection
-      reconnection: true, // Enable reconnection in case of failure
-    });
+  // useEffect(() => {
+  //   const socketConnection = io(process.env.REACT_APP_BACKEND_URL, {
+  //     auth: {
+  //       token: localStorage.getItem('token'),
+  //     },
+  //     transports: ['websocket'], // Enforce WebSocket connection
+  //     reconnection: true, // Enable reconnection in case of failure
+  //   });
 
+  //   socketConnection.on('connect', () => {
+  //     console.log('WebSocket connected:', socketConnection.id);
+  //   });
+
+  //   socketConnection.on('connect_error', (error) => {
+  //     console.error('WebSocket connection error:', error);
+  //   });
+
+  //   socketConnection.on('onlineUser', (data) => {
+  //     console.log('Online users:', data);
+  //     dispatch(setOnlineUser(data));
+  //   });
+
+  //   dispatch(setSocketConnection(socketConnection));
+
+  //   return () => {
+  //     socketConnection.disconnect();
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const socketURL = process.env.REACT_APP_BACKEND_URL;
+    if (!socketURL) {
+      console.error('WebSocket URL is missing in environment variables.');
+      return;
+    }
+  
+    const socketConnection = io(socketURL, {
+      auth: {
+        token: localStorage.getItem('token'), // Ensure this token is valid
+      },
+      transports: ['websocket', 'polling'], // Fallback to polling for debugging
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 3000,
+    });
+  
     socketConnection.on('connect', () => {
       console.log('WebSocket connected:', socketConnection.id);
     });
-
+  
     socketConnection.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
+      console.error('WebSocket connection error:', error.message);
+      // Log additional details
+      console.error('Details:', error);
     });
-
+  
+    socketConnection.on('disconnect', (reason) => {
+      console.warn('WebSocket disconnected:', reason);
+      if (reason === 'io server disconnect') {
+        socketConnection.connect();
+      }
+    });
+  
     socketConnection.on('onlineUser', (data) => {
       console.log('Online users:', data);
       dispatch(setOnlineUser(data));
     });
-
+  
     dispatch(setSocketConnection(socketConnection));
-
+  
     return () => {
       socketConnection.disconnect();
+      console.log('WebSocket connection closed.');
     };
   }, []);
+  
 
   const basePath = location.pathname === '/';
   return (
