@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { IoSearchOutline } from "react-icons/io5";
 import Loading from './Loading';
@@ -13,7 +14,7 @@ const SearchUser = ({onClose}) => {
 
 
     const handleSearchUser = async()=>{
-        const URL = `https://chat-application-8qij.onrender.com/api/search-user`
+       const URL = `${process.env.REACT_APP_BACKEND_URL}/api/search-user`
         try {
             setLoading(true)
             const response = await axios.post(URL,{

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { Link, useNavigate } from 'react-router-dom';
@@ -27,7 +28,7 @@ const CheckEmailPage = () => {
     e.preventDefault()
     e.stopPropagation()
 
-    const URL = `https://chat-application-8qij.onrender.com/api/email`
+     const URL = `${process.env.REACT_APP_BACKEND_URL}/api/email`
 
     try {
         const response = await axios.post(URL,data)

@@ -50,7 +50,7 @@ const RegisterPage = () => {
     e.preventDefault()
     e.stopPropagation()
 
-    const URL = `https://chat-application-8qij.onrender.com/api/register`
+    const URL = `${process.env.REACT_APP_BACKEND_URL}/api/register`
 
     try {
         const response = await axios.post(URL,data)

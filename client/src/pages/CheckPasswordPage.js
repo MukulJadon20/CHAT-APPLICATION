@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -39,7 +41,7 @@ const CheckPasswordPage = () => {
     e.preventDefault()
     e.stopPropagation()
 
-    const URL = `https://chat-application-8qij.onrender.com/api/password`
+      const URL = `${process.env.REACT_APP_BACKEND_URL}/api/password`
 
     try {
         const response = await axios({
