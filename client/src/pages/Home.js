@@ -1,13 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from 'axios';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { logout, setOnlineUser, setSocketConnection, setUser } from '../redux/userSlice';
-import Sidebar from '../components/Sidebar';
-import logo from '../assets/logo.png';
-import io from 'socket.io-client';
+import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  logout,
+  setOnlineUser,
+  setSocketConnection,
+  setUser,
+} from "../redux/userSlice";
+import Sidebar from "../components/Sidebar";
+import logo from "../assets/logo.png";
+import io from "socket.io-client";
 
 const Home = () => {
   const user = useSelector((state) => state.user);
@@ -24,12 +29,12 @@ const Home = () => {
 
       if (response.data.data.logout) {
         dispatch(logout());
-        navigate('/email');
+        navigate("/email");
       }
 
-      console.log('Current user details:', response.data.data);
+      console.log("Current user details:", response.data.data);
     } catch (error) {
-      console.error('Error fetching user details:', error);
+      console.error("Error fetching user details:", error);
       // Optional: Add error handling logic here, like redirecting to login
     }
   };
@@ -69,83 +74,82 @@ const Home = () => {
   // }, []);
 
   useEffect(() => {
-    const socketURL = process.env.REACT_APP_BACKEND_URL;
+    // const socketURL = process.env.REACT_APP_BACKEND_URL;
+    const socketURL = " https://chat-application-8qij.onrender.com";
     if (!socketURL) {
-      console.error('WebSocket URL is missing in environment variables.');
+      console.error("WebSocket URL is missing in environment variables.");
       return;
     }
-  
+
     const socketConnection = io(socketURL, {
       auth: {
-        token: localStorage.getItem('token'), // Ensure this token is valid
+        token: localStorage.getItem("token"), // Ensure this token is valid
       },
-      transports: ['websocket', 'polling'], // Fallback to polling for debugging
+      transports: ["websocket", "polling"], // Fallback to polling for debugging
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 3000,
     });
-  
-    socketConnection.on('connect', () => {
-      console.log('WebSocket connected:', socketConnection.id);
+
+    socketConnection.on("connect", () => {
+      console.log("WebSocket connected:", socketConnection.id);
     });
-  
-    socketConnection.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error.message);
+
+    socketConnection.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error.message);
       // Log additional details
-      console.error('Details:', error);
+      console.error("Details:", error);
     });
-  
-    socketConnection.on('disconnect', (reason) => {
-      console.warn('WebSocket disconnected:', reason);
-      if (reason === 'io server disconnect') {
+
+    socketConnection.on("disconnect", (reason) => {
+      console.warn("WebSocket disconnected:", reason);
+      if (reason === "io server disconnect") {
         socketConnection.connect();
       }
     });
-  
-    socketConnection.on('onlineUser', (data) => {
-      console.log('Online users:', data);
+
+    socketConnection.on("onlineUser", (data) => {
+      console.log("Online users:", data);
       dispatch(setOnlineUser(data));
     });
-  
+
     dispatch(setSocketConnection(socketConnection));
-  
+
     return () => {
       socketConnection.disconnect();
-      console.log('WebSocket connection closed.');
+      console.log("WebSocket connection closed.");
     };
   }, []);
-  
 
-  const basePath = location.pathname === '/';
+  const basePath = location.pathname === "/";
   return (
     <div className="grid lg:grid-cols-[300px,1fr] h-screen max-h-screen">
-      <section className={`bg-white ${!basePath && 'hidden'} lg:block`}>
+      <section className={`bg-white ${!basePath && "hidden"} lg:block`}>
         <Sidebar />
       </section>
 
       {/* Message component */}
-      <section className={`${basePath && 'hidden'}`}>
+      <section className={`${basePath && "hidden"}`}>
         <Outlet />
       </section>
 
       <div
         className={`justify-center items-center flex-col gap-2 hidden ${
-          !basePath ? 'hidden' : 'lg:flex'
+          !basePath ? "hidden" : "lg:flex"
         }`}
       >
         <div>
           <img src={logo} width={250} alt="logo" />
         </div>
-        <p className="text-lg mt-2 text-slate-500">Select user to send message</p>
+        <p className="text-lg mt-2 text-slate-500">
+          Select user to send message
+        </p>
       </div>
     </div>
   );
 };
 
 export default Home;
-
-
-
 
 // /* eslint-disable react-hooks/exhaustive-deps */
 // import axios from 'axios'
@@ -208,7 +212,6 @@ export default Home;
 //     }
 //   },[])
 
-
 //   const basePath = location.pathname === '/'
 //   return (
 //     <div className='grid lg:grid-cols-[300px,1fr] h-screen max-h-screen'>
@@ -220,7 +223,6 @@ export default Home;
 //         <section className={`${basePath && "hidden"}`} >
 //             <Outlet/>
 //         </section>
-
 
 //         <div className={`justify-center items-center flex-col gap-2 hidden ${!basePath ? "hidden" : "lg:flex" }`}>
 //             <div>
