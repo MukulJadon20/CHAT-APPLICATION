@@ -39,7 +39,7 @@ const Home = () => {
 
   /*** WebSocket connection ***/
   useEffect(() => {
-    const socketURL = "wss:/process.env.REACT_APP_BACKEND_URL.trim()";
+    const socketURL = " https://chat-application-8qij.onrender.com";
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Missing authentication token');
