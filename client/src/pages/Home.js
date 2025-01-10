@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +19,7 @@ const Home = () => {
 
   const fetchUserDetails = async () => {
     try {
-      const URL = `${process.env.REACT_APP_BACKEND_URL.trim()}/api/user-details`;
+      const URL = `${process.env.REACT_APP_BACKEND_URL}/api/user-details`;
       const response = await axios.get(URL, { withCredentials: true });
 
       if (response.data.data.logout) {
@@ -39,7 +41,7 @@ const Home = () => {
 
   /*** WebSocket connection ***/
   useEffect(() => {
-    const socketURL = " https://chat-application-8qij.onrender.com?.trim()";
+    const socketURL = process.env.REACT_APP_BACKEND_URL; // Ensure this is correctly set in your environment variables
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Missing authentication token');
@@ -106,6 +108,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 
