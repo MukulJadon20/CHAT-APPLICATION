@@ -39,7 +39,7 @@ const Home = () => {
 
   /*** WebSocket connection ***/
   useEffect(() => {
-    const socketURL ="https://chat-application-8qij.onrender.com"; // Ensure this is correctly set in your environment variables
+    const socketURL ="https://chat-application-wmv9.onrender.com"; // Ensure this is correctly set in your environment variables
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Missing authentication token');
