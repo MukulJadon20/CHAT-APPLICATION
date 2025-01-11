@@ -42,7 +42,7 @@ const Home = () => {
 
   /***socket connection */
   useEffect(() => {
-    const socketConnection = io(process.env.REACT_APP_BACKEND_URL, {
+    const socketConnection = io("https://chat-application-wmv9.onrender.com", {
       auth: {
         token: localStorage.getItem('token'),
       },
