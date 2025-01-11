@@ -67,11 +67,12 @@ const Home = () => {
       dispatch(setOnlineUser(data));
     });
 
-    socketConnection.on('disconnect', (reason) => {
-      console.warn('WebSocket disconnected:', reason);
-      // No need to explicitly reconnect; `reconnection: true` handles it
-    });
-
+     socketConnection.on('disconnect', (reason) => {
+    console.warn('WebSocket disconnected:', reason);
+    if (reason === 'io server disconnect') {
+      socketConnection.connect();
+    }
+  });
     dispatch(setSocketConnection(socketConnection));
 
     // Cleanup on component unmount
