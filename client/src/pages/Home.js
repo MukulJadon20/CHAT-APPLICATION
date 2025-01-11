@@ -154,7 +154,7 @@ const Home = () => {
 
   /***socket connection */
   useEffect(()=>{
-    const socketConnection = io("https://chat-application-8qij.onrender.com",{
+    const socketConnection = io("https://chat-application-wmv9.onrender.com",{
       auth : {
         token : localStorage.getItem('token')
       },
