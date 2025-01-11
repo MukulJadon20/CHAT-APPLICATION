@@ -42,24 +42,37 @@ const Home = () => {
 
   /***socket connection */
   useEffect(() => {
-    const socketConnection = io("https://chat-application-wmv9.onrender.com", {
+    const socketURL = process.env.REACT_APP_BACKEND_URL
+
+    // Ensure the WebSocket URL is valid
+    if (!socketURL) {
+      console.error("WebSocket URL is not defined in the environment variables")
+      return
+    }
+
+    const socketConnection = io(socketURL, {
       auth: {
         token: localStorage.getItem('token'),
       },
-      transports: ['websocket'], // Explicitly set transport type to WebSocket
+      transports: ['websocket'], // Explicitly use WebSocket transport
     })
 
+    // Log socket events for debugging
     socketConnection.on('connect', () => {
-      console.log("Socket connected:", socketConnection.id)
+      console.log("WebSocket connected with ID:", socketConnection.id)
+    })
+
+    socketConnection.on('connect_error', (error) => {
+      console.error("WebSocket connection error:", error)
+    })
+
+    socketConnection.on('disconnect', (reason) => {
+      console.warn("WebSocket disconnected:", reason)
     })
 
     socketConnection.on('onlineUser', (data) => {
       console.log("Online users:", data)
       dispatch(setOnlineUser(data))
-    })
-
-    socketConnection.on('connect_error', (err) => {
-      console.error("Socket connection error:", err)
     })
 
     dispatch(setSocketConnection(socketConnection))
